@@ -4,6 +4,33 @@ using namespace std;
 class Solution
 {
 public:
+    int twoPointer(vector<int> &a)
+    {
+        int l, r, lmax, rmax, res;
+        l = lmax = rmax = res = 0;
+        r = a.size() - 1;
+        while (l <= r)
+        {
+            if (a[l] <= a[r])
+            {
+                if (a[l] >= lmax)
+                    lmax = a[l];
+                else
+                    res += lmax - a[l];
+                l++;
+            }
+            else
+            {
+                if (a[r] >= rmax)
+                    rmax = a[r];
+                else
+                    res += rmax - a[r];
+                r--;
+            }
+        }
+        return res;
+    }
+
     int trap(vector<int> &height)
     {
         int Area = 0, n = height.size();
