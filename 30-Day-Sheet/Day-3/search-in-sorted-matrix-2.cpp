@@ -11,7 +11,7 @@ Ex -
 2 5 8
 3 6 9
 
-Therefore we cannot apply binary search on col 0 and then on the resultant row
+Therefore we cannot apply binary search on col-0 and then on the resultant row
 Therefore we rule out TC of O(logm + logn)
 
 Method -> O(m+n) method
