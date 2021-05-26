@@ -1,0 +1,2 @@
+// TODO | BINARY INDEXED TREE | BIT | FENWICK TREE | SEGMENT TREES
+// https://cs.stackexchange.com/questions/10538/bit-what-is-the-intuition-behind-a-binary-indexed-tree-and-how-was-it-thought-a/10541#10541
