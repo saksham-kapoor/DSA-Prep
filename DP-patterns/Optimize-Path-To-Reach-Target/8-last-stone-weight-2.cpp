@@ -86,3 +86,65 @@ public:
         return s1 - s2;
     }
 };
+
+// SPACE OPTIMIZED 1D DP SOLUTION
+class Solution
+{
+public:
+    int lastStoneWeightII(vector<int> &stones)
+    {
+        int n = stones.size();
+        int total_sum = accumulate(stones.begin(), stones.end(), 0);
+        int sum = total_sum / 2;
+
+        bool dp[sum + 1];
+        memset(dp, 0, sizeof(dp));
+        dp[0] = true;
+
+        // general case
+        for (int i = 1; i <= n; ++i)
+            for (int j = sum; j >= 0; --j)
+                if (stones[i - 1] <= j)
+                    dp[j] = dp[j - stones[i - 1]] || dp[j];
+
+        // find max element possible in last row of dp
+        // it means, that using n numbers the largest subset formed can have the following sums
+        int s2 = 0;
+        for (int i = sum; i >= 0; --i)
+        {
+            if (dp[i])
+            {
+                s2 = i;
+                break;
+            }
+        }
+
+        int s1 = total_sum - s2;
+
+        return s1 - s2;
+    }
+};
+
+// BITMASK SOLUTION
+class Solution
+{
+public:
+    int lastStoneWeightII(vector<int> &stones)
+    {
+        int tot_sum = accumulate(stones.begin(), stones.end(), 0);
+        int sum = tot_sum / 2;
+        bitset<3001> b(1);
+
+        for (auto &i : stones)
+            b |= (b << i);
+
+        int i;
+        for (i = sum; i >= 1; --i)
+        {
+            if (b[i])
+                break;
+        }
+
+        return tot_sum - 2 * i;
+    }
+};
