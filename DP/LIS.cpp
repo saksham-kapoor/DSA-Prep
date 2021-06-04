@@ -1,3 +1,25 @@
+// Neatest Method LIS
+class Solution
+{
+public:
+    int lengthOfLIS(vector<int> &nums)
+    {
+        int n = nums.size();
+        vector<int> t;
+
+        for (int i = 0; i < n; ++i)
+        {
+            auto it = lower_bound(begin(t), end(t), nums[i]);
+            if (it == t.end())
+                t.push_back(nums[i]);
+            else
+                *it = nums[i];
+        }
+
+        return t.size();
+    }
+};
+
 // O(nlogn) Method [DP + BINARY SEARCH]
 class Solution
 {
