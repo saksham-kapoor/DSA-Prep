@@ -1,5 +1,40 @@
 // THERE IS ALWAYS AN ELEGANT WAY TO WRITE CODE
 
+// BEAUTIFUL WAY
+class Solution
+{
+public:
+    string reformatNumber(string s)
+    {
+        string res;
+
+        for (int i = 0; i < s.size(); ++i)
+        {
+            if (!isdigit(s[i]))
+                continue;
+
+            res.push_back(s[i]);
+            if (res.size() % 4 == 3)
+                res.push_back('-');
+        }
+
+        // invalid cases
+        // 123-1 ----> case 1
+        // 123-123- ----> case 2
+
+        // case 2
+        if (res.back() == '-')
+            res.pop_back();
+
+        // case 1
+        if (res.size() > 1 && res[res.size() - 2] == '-')
+            swap(res[res.size() - 3], res[res.size() - 2]);
+
+        return res;
+    }
+};
+
+// OKAYISH WAY
 class Solution
 {
 public:
