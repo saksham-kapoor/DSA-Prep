@@ -81,3 +81,49 @@ public:
         return cnt == n;
     }
 };
+
+// Method 3 : DP + DFS
+class Solution
+{
+    // states
+    // dp[i] = 0 (unvisited)
+    // dp[i] = 1 (visited in this dfs)
+    // dp[i] = 2 (visited in some prev dfs)
+
+    bool dfs(int node, vector<int> adj[], int dp[])
+    {
+        if (dp[node] == 1) // cycle
+            return true;
+
+        if (dp[node] == 0)
+        {
+            dp[node] = 1;
+            for (auto &i : adj[node])
+                if (dfs(i, adj, dp) == true)
+                    return true;
+        }
+
+        dp[node] = 2;
+        return false;
+    }
+
+public:
+    bool canFinish(int n, vector<vector<int>> &pre)
+    {
+        int dp[n];
+        memset(dp, 0, sizeof(dp));
+
+        vector<int> adj[n];
+        // create adj
+        for (auto &r : pre)
+            adj[r[1]].push_back(r[0]);
+
+        for (int i = 0; i < n; ++i)
+        {
+            if (dp[i] == 0 && dfs(i, adj, dp) == true)
+                return false; // if cyclic
+        }
+
+        return true;
+    }
+};
