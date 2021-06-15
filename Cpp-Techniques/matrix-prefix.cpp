@@ -11,7 +11,7 @@ int main()
         {1, 2, 3, 4, 5},
         {1, 2, 3, 4, 5}};
 
-    int row[7][7] = {}, col[7][7] = {}, d1[7][7] = {}, d2[7][7] = {};
+    int row[7][7] = {}, col[7][7] = {}, d1[7][7] = {}, d2[7][7] = {}, sum[7][7] = {};
 
     // main code
     for (int i = 1; i <= m; ++i)
@@ -22,6 +22,7 @@ int main()
             col[i][j] = mat[i - 1][j - 1] + col[i - 1][j];
             d1[i][j] = mat[i - 1][j - 1] + d1[i - 1][j - 1];
             d2[i][j] = mat[i - 1][j - 1] + d2[i - 1][j + 1];
+            sum[i][j] = mat[i - 1][j - 1] + sum[i - 1][j] + sum[i][j - 1] - sum[i - 1][j - 1];
         }
     }
 
@@ -58,6 +59,16 @@ int main()
 
     // row prefix
     for (auto &r : d2)
+    {
+        for (auto &c : r)
+            cout << c << "\t";
+        cout << "\n";
+    }
+
+    cout << "\n";
+
+    // sum prefix
+    for (auto &r : sum)
     {
         for (auto &c : r)
             cout << c << "\t";
