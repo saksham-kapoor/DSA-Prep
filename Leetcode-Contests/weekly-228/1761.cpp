@@ -23,9 +23,9 @@ public:
             adj[e[0]][e[1]] = 1, adj[e[1]][e[0]] = 1, d[e[0]]++, d[e[1]]++;
 
         for (int i = 1; i <= n; ++i)
-            for (int j = 1; j <= n; ++j)
+            for (int j = i + 1; j <= n; ++j)
                 if (adj[i][j])
-                    for (int k = 1; k <= n; ++k)
+                    for (int k = j + 1; k <= n; ++k)
                         if (adj[i][k] && adj[j][k])
                             res = min(res, d[i] + d[j] + d[k] - 6);
 
