@@ -1,37 +1,96 @@
+class Node
+{
+public:
+    int key, val;
+    Node *next, *prev;
+    Node(int k, int v)
+    {
+        key = k, val = v;
+        next = prev = nullptr;
+    }
+};
+
 class LRUCache
 {
-    int size;
-    list<int> lru;                              // MRU ... LRU
-    unordered_map<int, list<int>::iterator> mp; // key -> iterator
-    unordered_map<int, int> kv;                 // key -> value
+    int capacity;
+    unordered_map<int, Node *> key_address;
+    Node *head, *tail;
 
 public:
-    LRUCache(int capacity) : size(capacity) {}
+    LRUCache(int capacity) : capacity(capacity)
+    {
+        head = new Node(-1, -1);
+        tail = new Node(-1, -1);
+        head->next = tail;
+        tail->prev = head;
+    }
+
     int get(int key)
     {
-        if (kv.find(key) == kv.end())
-            return -1;
-        updateLRU(key);
-        return kv[key];
+        auto it = key_address.find(key);
+        int res = -1;
+        if (it != key_address.end())
+        {
+            // store value
+            res = it->second->val;
+
+            // push it just after head
+            put_in_front(it->second);
+        }
+        return res;
     }
+
     void put(int key, int value)
     {
-        if (kv.size() == size && kv.find(key) == kv.end())
-            evict();
-        updateLRU(key);
-        kv[key] = value;
+        auto it = key_address.find(key);
+        if (it != key_address.end())
+        {
+            // key already in list
+            it->second->val = value;
+
+            // push it next to head
+            put_in_front(it->second);
+        }
+        else
+        {
+            if (key_address.size() == capacity)
+                delete_lru_cache();
+
+            Node *node = new Node(key, value);
+
+            // put in front of head
+            node->next = head->next;
+            node->prev = head;
+            head->next = node;
+            node->next->prev = node;
+
+            key_address.insert({key, node});
+        }
     }
-    void updateLRU(int key)
+
+    void put_in_front(Node *node)
     {
-        if (kv.find(key) != kv.end())
-            lru.erase(mp[key]);
-        lru.push_front(key);
-        mp[key] = lru.begin();
+        // delete element
+        node->prev->next = node->next;
+        node->next->prev = node->prev;
+
+        // add it in front of head
+        node->next = head->next;
+        node->prev = head;
+        node->next->prev = node;
+        head->next = node;
     }
-    void evict()
+
+    void delete_lru_cache()
     {
-        mp.erase(lru.back());
-        kv.erase(lru.back());
-        lru.pop_back();
+        Node *temp = tail->prev;
+
+        // delete from list
+        temp->prev->next = temp->next;
+        temp->next->prev = temp->prev;
+
+        // delete from map
+        key_address.erase(temp->key);
+        delete (temp);
     }
 };
